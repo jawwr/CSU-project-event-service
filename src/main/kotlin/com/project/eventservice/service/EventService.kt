@@ -42,6 +42,9 @@ class EventService(
         return mapper.toEventResponse(updatedEvent)
     }
 
+    @Transactional
+    fun deleteEvent(id: Long) = repository.deleteById(id)
+
     fun updateEvent(updateEvent: Event, savedEvent: Event) = savedEvent.apply {
         this.title = updateEvent.title
         this.cityCode = updateEvent.cityCode
