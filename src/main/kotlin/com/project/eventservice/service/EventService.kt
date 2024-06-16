@@ -31,6 +31,25 @@ class EventService(
         return mapper.toEventResponse(savedEvent)
     }
 
+    @Transactional
+    fun updateEvent(id: Long, eventRequest: EventRequest): EventResponse {
+        val event = mapper.fromEventRequest(eventRequest).apply { this.id = id }
+        validateEvent(event)
+        val savedEvent = repository.findById(id)
+            .orElseThrow { throw Exception("Event with id $id doesn't exist") }
+        updateEvent(event, savedEvent)
+        val updatedEvent = repository.save(savedEvent)
+        return mapper.toEventResponse(updatedEvent)
+    }
+
+    fun updateEvent(updateEvent: Event, savedEvent: Event) = savedEvent.apply {
+        this.title = updateEvent.title
+        this.cityCode = updateEvent.cityCode
+        this.text = updateEvent.text
+        this.dateEnd = updateEvent.dateEnd
+        this.dateStart = updateEvent.dateStart
+    }
+
     private fun validateEvent(event: Event) {
         if (event.dateEnd.isBefore(event.dateStart)) {
             throw Exception("Date start must be before date create")

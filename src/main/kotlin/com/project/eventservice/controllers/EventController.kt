@@ -22,4 +22,11 @@ class EventController(private val service: EventService) {
     @PostMapping
     @Operation(summary = "Создание события")
     fun createEvent(@RequestBody event: EventRequest) = ResponseEntity.ok(service.createEvent(event))
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Обновить событие по id")
+    fun updateEvent(
+        @PathVariable("id") id: Long,
+        @RequestBody event: EventRequest
+    ) = ResponseEntity.ok(service.updateEvent(id, event))
 }
