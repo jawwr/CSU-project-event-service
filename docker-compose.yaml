@@ -1,0 +1,25 @@
+version: '3.9'
+services:
+  db:
+    image: postgres
+    container_name: event_db
+    env_file:
+      - .env
+    restart: on-failure
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  event-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: event_service
+    env_file:
+      - .env
+    ports:
+      - "8000:8080"
+    depends_on:
+      - db
+    links:
+      - db
+    restart: on-failure
