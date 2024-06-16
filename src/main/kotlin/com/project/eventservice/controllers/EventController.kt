@@ -29,4 +29,8 @@ class EventController(private val service: EventService) {
         @PathVariable("id") id: Long,
         @RequestBody event: EventRequest
     ) = ResponseEntity.ok(service.updateEvent(id, event))
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Удалить событие по id")
+    fun deleteEvent(@PathVariable("id") id: Long) = ResponseEntity.ok(service.deleteEvent(id))
 }
